@@ -1,0 +1,104 @@
+<div class="container" ng-controller="PessoasController">
+  <div class="container">
+    <h2>Cadastro de Pessoas</h2>
+    <form ng-submit="salvarPessoa()">
+      <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" placeholder="ID da pessoa" ng-model="pessoa.id">
+      </div>
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" class="form-control" id="nome" placeholder="Digite o nome da pessoa" ng-model="pessoa.nome">
+      </div>
+      <div class="form-group">
+        <label for="idade">Idade:</label>
+        <input type="text" class="form-control" id="idade" placeholder="Digite a idade da pessoa"
+          ng-model="pessoa.idade">
+      </div>
+      <div class="form-group">
+        <label>Funções da Pessoa:</label>
+        <div>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#funcoesModal">
+            Selecionar Funções
+          </button>
+        </div>
+        <div>
+          <label ng-repeat="funcao in funcoesPessoa" class="label label-info">{{ funcao.nome }}</label>
+        </div>
+      </div>
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" ng-click="salvarPessoa()">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Pessoas Cadastradas</h2>
+    <div class="form-group">
+      <label for="pessoaSearch">Buscar Pessoa:</label>
+      <input type="text" class="form-control" id="pessoaSearch" ng-model="pessoaSearch">
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Funções</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="pessoa in pessoasDisponiveis | filter:pessoaSearch">
+          <td>{{ pessoa.id }}</td>
+          <td>{{ pessoa.nome }}</td>
+          <td>{{ pessoa.idade }}</td>
+          <td>
+            <label ng-repeat="funcao in pessoa.funcoes" class="label label-info">{{ funcao.nome }}</label>
+            <label ng-if="pessoa.funcoes.length == 0" class="label label-info">Nenhuma</label>
+          </td>
+          <td>
+            <button type="button" id="btnEditar" name="btnEditar" class="btn btn-primary"
+              ng-click="editarPessoa(pessoa.id)">Editar</button>
+            <button type="button" id="btnExcluir" name="btnExcluir" class="btn btn-danger"
+              ng-click="excluirPessoa(pessoa.id)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="funcoesModal" tabindex="-1" role="dialog" aria-labelledby="funcoesModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="funcoesModalLabel">Selecionar Funções</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="funcaoSearch">Buscar Função:</label>
+            <input type="text" class="form-control" id="funcaoSearch" ng-model="funcaoSearch">
+          </div>
+          <div class="form-group text-right">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" id="btnSalvarFuncao" name="btnSalvarFuncao" class="btn btn-primary"
+              data-dismiss="modal" ng-click="salvarFuncoes()">Salvar Selecionadas</button>
+          </div>
+          <div class="form-group">
+            <label>Funções Disponíveis:</label>
+            <ul class="list-group">
+              <li class="list-group-item" ng-repeat="funcao in funcoesDisponiveis | filter:funcaoSearch">
+                <label>
+                  <input type="checkbox" ng-model="funcao.selected">
+                  <span>{{ funcao.nome }} (Idade mínima: {{ funcao.idadeMinima }})</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
